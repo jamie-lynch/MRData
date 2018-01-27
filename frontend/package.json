@@ -1,0 +1,23 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^4.0.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.1.0"
+  },
+  "scripts": {
+    "start": "yarn run build-css && yarn run watch-css & react-scripts start",
+    "build": "yarn run build-css && react-scripts build",
+    "lint": "./node_modules/eslint/bin/eslint.js .",
+    "prettier": "./node_modules/prettier/bin/prettier.js --single-quote --no-semi --write 'src/**/*.js'",
+    "build-css": "node-sass-chokidar src/scss/main.scss src/index.css",
+    "watch-css": "node-sass-chokidar src/scss/main.scss src/index.css -w"
+  },
+  "devDependencies": {
+    "node-sass-chokidar": "^0.0.3",
+    "prettier": "^1.10.2"
+  }
+}
