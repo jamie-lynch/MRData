@@ -4,10 +4,25 @@ var favicon = require('serve-favicon')
 var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
+var mongoose = require('mongoose')
+var Match = require('./models/match')
 
 var index = require('./routes/index')
+require('dotenv').config()
 
 var app = express()
+
+// connect to db
+mongoose.Promise = require('bluebird')
+mongoose.connect(process.env.DB_ADDRESS).catch(err => {
+  console.error(err)
+})
+
+var db = mongoose.connection
+db.on('error', console.error.bind(console, 'MongoDB connection error:'))
+Match.clear().then(() => {
+  Match.create()
+})
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use(logger('dev'))

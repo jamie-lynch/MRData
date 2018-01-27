@@ -25,8 +25,15 @@ class App extends Component {
   }
 
   setInitialState() {
-    this.ws = new window.WebSocket(`ws://${window.location.hostname}:3001`)
-    this.listen(this.ws)
+    request
+      .get(`//${window.location.hostname}:3001/get-data`)
+      .end((err, res) => {
+        if (err) toast.error(err.message || 'An unexpected error occurred')
+
+        this.setState({ stats: res.body.stats })
+        this.ws = new window.WebSocket(`ws://${window.location.hostname}:3001`)
+        this.listen(this.ws)
+      })
   }
 
   listen(ws) {
