@@ -1,0 +1,32 @@
+version: '3.2'
+
+services:
+  mrdata-frontend:
+    container_name: mrdata-frontend
+    ports:
+      - 3000:3000
+      - 80:3000
+    build: ./frontend
+    depends_on:
+      - mrdata-backend
+
+  mrdata-backend:
+    container_name: mrdata-backend
+    ports:
+      - 3001:3001
+    build: ./backend
+    depends_on:
+      - mongodb
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - type: volume
+        source: heis-mongo-db
+        target: /data/db
+
+volumes:
+  heis-mongo-db:
