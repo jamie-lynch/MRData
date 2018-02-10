@@ -85,4 +85,19 @@ const stats = [
   }
 ]
 
-module.exports = { stats }
+const teams = [
+  {
+    name: 'Team 1',
+    shortname: 'TM1',
+    color: '#6931ba'
+  },
+  {
+    name: 'Team 2',
+    shortname: 'TM2',
+    color: '#de13bd'
+  }
+]
+
+const score = [0, 0]
+
+module.exports = { stats, teams, score }

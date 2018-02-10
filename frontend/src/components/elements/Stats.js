@@ -51,7 +51,7 @@ class Stats extends Component {
 
   render() {
     return (
-      <div className="stats">
+      <div className="stats container-fluid">
         <h3 className="d-inline-block mt-4">Stats</h3>
         {this.state.stats.map((stat, index) => (
           <div

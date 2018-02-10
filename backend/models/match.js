@@ -4,7 +4,9 @@ var id
 var config = require('../config')
 
 var matchSchema = new Schema({
-  stats: [] // [{name: string, display: string, values: [int, int], type: enum('percentage', 'absolute')}]
+  stats: [], // [{name: string, display: string, values: [int, int], type: enum('percentage', 'absolute')}]
+  teams: [], // [{name: string, shortname: str, colour: hex}]
+  score: [] // [int, int]
 })
 
 matchSchema.statics.create = type => {
@@ -13,6 +15,7 @@ matchSchema.statics.create = type => {
 
     let conf = config[type]
 
+    // set default stats
     let stats = conf.stats.map(stat => {
       return {
         name: stat.name,
@@ -23,6 +26,9 @@ matchSchema.statics.create = type => {
       }
     })
     match.stats = stats
+
+    match.teams = conf.teams
+    match.score = conf.score
 
     match
       .save()

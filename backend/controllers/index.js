@@ -14,7 +14,22 @@ const getData = (req, res, next) => {
 const updateData = (req, res, next) => {
   let type = req.body.type
   let data = req.body.data
-  Match.modify({ stats: data })
+
+  let updateObj = {}
+  if (type === 'stats') {
+    updateObj = { stats: data }
+  } else {
+    let eventType = data.type
+    switch (eventType) {
+      case 'score':
+        updateObj = {
+          [`score.${data.data.team_index}`]: data.data.score
+        }
+        break
+    }
+  }
+
+  Match.modify(updateObj)
     .then(() => {
       wss.broadcastChange(type, data)
       return res.status(200).json('ok')

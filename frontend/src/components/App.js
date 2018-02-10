@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import request from 'superagent'
 import { ToastContainer, toast } from 'react-toastify'
+
 import Stats from './elements/Stats'
+import Teams from './elements/Teams'
 
 class App extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      data: {}
+      data: null
     }
 
     this.setInitialState = this.setInitialState.bind(this)
@@ -47,6 +49,27 @@ class App extends Component {
             return { data: state }
           })
           break
+        case 'teams':
+          this.setState(prevState => {
+            let state = Object.assign({}, prevState.data)
+            state.teams = data
+            return { data: state }
+          })
+          break
+        case 'event':
+          let eventType = data.type
+          switch (eventType) {
+            case 'score':
+              this.setState(prevState => {
+                let state = Object.assign({}, prevState.data)
+                state.score[data.data.team_index] = data.data.score
+                return { data: state }
+              })
+              break
+            default:
+              break
+          }
+          break
         default:
           break
       }
@@ -69,7 +92,14 @@ class App extends Component {
         <h1>Match Report Data Input</h1>
         <p>Keep track of the game using the inputs below</p>
 
-        <Stats sendUpdate={this.sendUpdate} stats={this.state.data.stats} />
+        {this.state.data ? (
+          <span>
+            <Teams sendUpdate={this.sendUpdate} data={this.state.data} />
+            <Stats sendUpdate={this.sendUpdate} stats={this.state.data.stats} />
+          </span>
+        ) : (
+          <div>Loading...</div>
+        )}
 
         <ToastContainer position="bottom-right" />
       </div>

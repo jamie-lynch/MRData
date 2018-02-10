@@ -1,0 +1,14 @@
+.teams {
+  border: 1px solid #696969;
+  // padding: 0 1.5em 0.5em 1em;
+  padding: 1em;
+  margin: 1em;
+}
+
+.team-colour-patch {
+  display: inline-block;
+  width: 12px;
+  height: 15px;
+  transform: skewX(-30deg);
+  margin-left: 10px;
+}
