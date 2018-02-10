@@ -21,7 +21,7 @@ mongoose.connect(process.env.DB_ADDRESS).catch(err => {
 var db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 Match.clear().then(() => {
-  Match.create()
+  Match.create('rugby')
 })
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))

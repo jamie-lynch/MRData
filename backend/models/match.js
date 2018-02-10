@@ -1,14 +1,28 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 var id
+var config = require('../config')
 
 var matchSchema = new Schema({
-  stats: []
+  stats: [] // [{name: string, display: string, values: [int, int], type: enum('percentage', 'absolute')}]
 })
 
-matchSchema.statics.create = () => {
+matchSchema.statics.create = type => {
   return new Promise((resolve, reject) => {
     var match = new Match({})
+
+    let conf = config[type]
+
+    let stats = conf.stats.map(stat => {
+      return {
+        name: stat.name,
+        display_name: stat.display,
+        type: stat.type,
+        values: [stat.default, stat.default],
+        increment: stat.increment
+      }
+    })
+    match.stats = stats
 
     match
       .save()
