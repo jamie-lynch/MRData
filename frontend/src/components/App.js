@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify'
 
 import Stats from './elements/Stats'
 import Teams from './elements/Teams'
+import Lineup from './elements/Lineup'
 
 class App extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class App extends Component {
     this.setInitialState = this.setInitialState.bind(this)
     this.listen = this.listen.bind(this)
     this.sendUpdate = this.sendUpdate.bind(this)
+    this.updateStats = this.updateStats.bind(this)
 
     this.ws = null
   }
@@ -86,6 +88,17 @@ class App extends Component {
       })
   }
 
+  updateStats(index, value, team_index) {
+    let stats = this.state.data.stats.slice()
+    stats[index].values[team_index] = value
+    var data = {
+      type: 'stats',
+      data: stats
+    }
+
+    this.sendUpdate(data)
+  }
+
   render() {
     return (
       <div className="App container">
@@ -94,8 +107,17 @@ class App extends Component {
 
         {this.state.data ? (
           <span>
-            <Teams sendUpdate={this.sendUpdate} data={this.state.data} />
+            <Teams
+              sendUpdate={this.sendUpdate}
+              teams={this.state.data.teams}
+              score={this.state.data.score}
+            />
             <Stats sendUpdate={this.sendUpdate} stats={this.state.data.stats} />
+            <Lineup
+              sendUpdate={this.sendUpdate}
+              data={this.state.data}
+              updateStats={this.updateStats}
+            />
           </span>
         ) : (
           <div>Loading...</div>

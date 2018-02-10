@@ -26,6 +26,8 @@ const updateData = (req, res, next) => {
           [`score.${data.data.team_index}`]: data.data.score
         }
         break
+      default:
+        break
     }
   }
 

@@ -6,7 +6,8 @@ class Teams extends Component {
     super(props)
 
     this.state = {
-      data: this.props.data
+      teams: this.props.teams,
+      score: this.props.score
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -14,7 +15,7 @@ class Teams extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.data })
+    this.setState({ teams: nextProps.teams, score: nextProps.score })
   }
 
   updateScore(team, score, index) {
@@ -40,12 +41,10 @@ class Teams extends Component {
     let value = e.target.value
 
     this.setState(prevState => {
-      let data = Object.assign({}, prevState.data)
-      let score = data.score.slice()
+      let score = this.props.score.slice()
       score[index] = value
-      data.score = score
-      this.updateScore(data.teams[index].shortname, score[index], index)
-      return { data }
+      this.updateScore(prevState.teams[index].shortname, score[index], index)
+      return { score }
     })
   }
 
@@ -56,21 +55,17 @@ class Teams extends Component {
 
         <div className="row">
           <div className="col-6">
-            {`${this.state.data.teams[0].name} (${
-              this.state.data.teams[0].shortname
-            })`}
+            {`${this.state.teams[0].name} (${this.state.teams[0].shortname})`}
             <span
               className="team-colour-patch"
-              style={{ backgroundColor: this.state.data.teams[0].color }}
+              style={{ backgroundColor: this.state.teams[0].color }}
             />
           </div>
           <div className="col-6">
-            {`${this.state.data.teams[1].name} (${
-              this.state.data.teams[1].shortname
-            })`}
+            {`${this.state.teams[1].name} (${this.state.teams[1].shortname})`}
             <span
               className="team-colour-patch"
-              style={{ backgroundColor: this.state.data.teams[1].color }}
+              style={{ backgroundColor: this.state.teams[1].color }}
             />
           </div>
         </div>
@@ -82,7 +77,7 @@ class Teams extends Component {
               name="score-0"
               className="form-control"
               onChange={this.handleChange}
-              value={this.state.data.score[0]}
+              value={this.state.score[0]}
             />
           </div>
           <div className="col-6">
@@ -91,7 +86,7 @@ class Teams extends Component {
               type="text"
               className="form-control"
               onChange={this.handleChange}
-              value={this.state.data.score[1]}
+              value={this.state.score[1]}
             />
           </div>
         </div>
