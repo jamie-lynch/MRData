@@ -57,10 +57,17 @@
       [
         {
           player_id: int,
-          firstname: string,
+          firstname: string,  // Team 1
           surname: string
         }
-      ], []]
+      ], [
+        {
+          player_id: int,
+          firstname: string,  // Team 2
+          surname: string
+        }
+      ]
+    ]
   }
 }
 ```
