@@ -56,7 +56,7 @@ class Lineup extends Component {
             type: event.type,
             data: {
               score: this.state.score[team_index] + event.inc,
-              player_id: player.number,
+              player_id: player.player_id,
               team: this.state.teams[team_index].shortname,
               type: event.subtype,
               display: event.display,
@@ -72,7 +72,7 @@ class Lineup extends Component {
           data: {
             type: event.type,
             data: {
-              player_id: player.number,
+              player_id: player.player_id,
               team: this.state.teams[team_index].shortname,
               time: Date.now(),
               team_index
@@ -98,8 +98,8 @@ class Lineup extends Component {
         <div className="row">
           <div className="col-6">
             {this.state.lineup[0].map(player => (
-              <div key={player.number} className="row mb-1">
-                <span className="col-1">{player.number}</span>
+              <div key={player.player_id} className="row mb-1">
+                <span className="col-1">{player.player_id}</span>
                 <span className="col-1">-</span>
                 <span className="col-3">{`${player.firstname} ${
                   player.surname
@@ -119,20 +119,20 @@ class Lineup extends Component {
                   ))}
                   {this.state.events.slice(2).length && (
                     <ButtonDropdown
-                      isOpen={this.state.dropdown === `${player.number}-0`}
-                      toggle={() => this.toggle(`${player.number}-0`)}
+                      isOpen={this.state.dropdown === `${player.player_id}-0`}
+                      toggle={() => this.toggle(`${player.player_id}-0`)}
                       className="ml-1"
                     >
                       <DropdownToggle caret>Other</DropdownToggle>
                       <DropdownMenu
                         className={c({
-                          open: this.state.dropdown === `${player.number}-0`
+                          open: this.state.dropdown === `${player.player_id}-0`
                         })}
                       >
                         {this.state.events.slice(2).map(option => {
                           return (
                             <DropdownItem
-                              key={`${option.display}-${player.number}`}
+                              key={`${option.display}-${player.player_id}`}
                               onClick={() =>
                                 this.handleClick(option, player, 0)
                               }
@@ -150,8 +150,8 @@ class Lineup extends Component {
           </div>
           <div className="col-6">
             {this.state.lineup[1].map(player => (
-              <div key={player.number} className="row mb-1">
-                <span className="col-1">{player.number}</span>
+              <div key={player.player_id} className="row mb-1">
+                <span className="col-1">{player.player_id}</span>
                 <span className="col-1">-</span>
                 <span className="col-3">{`${player.firstname} ${
                   player.surname
@@ -171,20 +171,20 @@ class Lineup extends Component {
                   ))}
                   {this.state.events.slice(2).length && (
                     <ButtonDropdown
-                      isOpen={this.state.dropdown === `${player.number}-1`}
-                      toggle={() => this.toggle(`${player.number}-1`)}
+                      isOpen={this.state.dropdown === `${player.player_id}-1`}
+                      toggle={() => this.toggle(`${player.player_id}-1`)}
                       className="ml-1"
                     >
                       <DropdownToggle caret>Other</DropdownToggle>
                       <DropdownMenu
                         className={c({
-                          open: this.state.dropdown === `${player.number}-1`
+                          open: this.state.dropdown === `${player.player_id}-1`
                         })}
                       >
                         {this.state.events.slice(2).map(option => {
                           return (
                             <DropdownItem
-                              key={`${option.display}-${player.number}`}
+                              key={`${option.display}-${player.player_id}`}
                               onClick={() =>
                                 this.handleClick(option, player, 1)
                               }
