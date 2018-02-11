@@ -7,7 +7,7 @@ var matchSchema = new Schema({
   stats: [], // [{name: string, display: string, values: [int, int], type: enum('percentage', 'absolute')}]
   teams: [], // [{name: string, shortname: str, colour: hex}]
   score: [], // [int, int]
-  lineup: [], // [[{number: int, firstname: string, surname: string}], []]
+  lineups: [], // [[{number: int, firstname: string, surname: string}], []]
   events: [] // [{ type: string, display: string, inc: int, stats: string }]
 })
 
@@ -31,7 +31,7 @@ matchSchema.statics.create = type => {
 
     match.teams = conf.teams
     match.score = conf.score
-    match.lineup = conf.lineup
+    match.lineups = conf.lineups
     match.events = conf.events
 
     match

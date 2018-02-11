@@ -21,8 +21,8 @@ const updateData = (req, res, next) => {
     updateObj = { stats: data }
   } else if (type === 'team') {
     updateObj = {
-      team: data.teams,
-      lineup: data.lineups
+      teams: data.teams,
+      lineups: data.lineups
     }
   } else {
     let eventType = data.type

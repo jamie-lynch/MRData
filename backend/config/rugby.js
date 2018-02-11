@@ -100,7 +100,7 @@ const teams = [
 
 const score = [0, 0]
 
-const lineup = [
+const lineups = [
   [
     { player_id: 1, firstname: 'player', surname: '1' },
     { player_id: 2, firstname: 'player', surname: '2' },
