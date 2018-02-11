@@ -2,22 +2,31 @@ import React, { Component } from 'react'
 import request from 'superagent'
 import { ToastContainer, toast } from 'react-toastify'
 
-import Stats from './elements/Stats'
-import Teams from './elements/Teams'
-import Lineup from './elements/Lineup'
+import Stats from './widgets/Stats'
+import Teams from './widgets/Teams'
+import Lineup from './widgets/Lineup'
+
+import Loader from './elements/Loader'
+import Navbar from './elements/Navbar'
 
 class App extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      data: null
+      data: null,
+      widgets: {
+        teams: true,
+        stats: true,
+        lineups: true
+      }
     }
 
     this.setInitialState = this.setInitialState.bind(this)
     this.listen = this.listen.bind(this)
     this.sendUpdate = this.sendUpdate.bind(this)
     this.updateStats = this.updateStats.bind(this)
+    this.setDisplayedWidgets = this.setDisplayedWidgets.bind(this)
 
     this.ws = null
   }
@@ -100,30 +109,48 @@ class App extends Component {
     this.sendUpdate(data)
   }
 
+  setDisplayedWidgets(event) {
+    let data = event.target
+    this.setState(prevState => {
+      let widgets = Object.assign({}, prevState.widgets)
+      widgets[data.id] = data.checked
+      return { widgets }
+    })
+  }
+
   render() {
+    if (!this.state.data) {
+      return <Loader />
+    }
     return (
       <div className="App container">
         <h1>Match Report Data Input</h1>
         <p>Keep track of the game using the inputs below</p>
 
-        {this.state.data ? (
-          <span>
-            <Teams
-              sendUpdate={this.sendUpdate}
-              teams={this.state.data.teams}
-              score={this.state.data.score}
-            />
-            <Stats sendUpdate={this.sendUpdate} stats={this.state.data.stats} />
-            <Lineup
-              sendUpdate={this.sendUpdate}
-              data={this.state.data}
-              updateStats={this.updateStats}
-            />
-          </span>
-        ) : (
-          <div>Loading...</div>
+        {this.state.widgets.teams && (
+          <Teams
+            sendUpdate={this.sendUpdate}
+            teams={this.state.data.teams}
+            score={this.state.data.score}
+          />
         )}
 
+        {this.state.widgets.stats && (
+          <Stats sendUpdate={this.sendUpdate} stats={this.state.data.stats} />
+        )}
+
+        {this.state.widgets.lineups && (
+          <Lineup
+            sendUpdate={this.sendUpdate}
+            data={this.state.data}
+            updateStats={this.updateStats}
+          />
+        )}
+
+        <Navbar
+          values={this.state.widgets}
+          onCheckClick={this.setDisplayedWidgets}
+        />
         <ToastContainer position="bottom-right" />
       </div>
     )

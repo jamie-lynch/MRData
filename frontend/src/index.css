@@ -6031,7 +6031,8 @@ a.text-dark:hover, a.text-dark:focus {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center; }
+  align-items: center;
+  margin-bottom: 50px; }
 
 .stats {
   border: 1px solid #696969;
@@ -6054,3 +6055,30 @@ a.text-dark:hover, a.text-dark:focus {
   border: 1px solid #696969;
   padding: 1em;
   margin: 1em; }
+
+.loader {
+  border: 16px solid #636363;
+  border-top: 16px solid black;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  position: absolute;
+  top: 40%;
+  left: 50%; }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+
+.navbar {
+  background: #d0cfcf; }
+
+.display-checks {
+  display: flex;
+  flex-direction: row; }
+
+.navbar .form-check {
+  margin: 0 10px; }
