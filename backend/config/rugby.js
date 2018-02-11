@@ -157,4 +157,4 @@ const events = [
   { type: 'red_card', display: 'Red Card', inc: 2, stats: 'red_cards' }
 ]
 
-module.exports = { stats, teams, score, lineup, events }
+module.exports = { stats, teams, score, lineups, events }

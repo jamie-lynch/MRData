@@ -13,7 +13,7 @@ class Lineup extends Component {
     super(props)
 
     this.state = {
-      lineup: this.props.data.lineup,
+      lineups: this.props.data.lineups,
       events: this.props.data.events,
       teams: this.props.data.teams,
       score: this.props.data.score,
@@ -27,7 +27,7 @@ class Lineup extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      lineup: nextProps.data.lineup,
+      lineups: nextProps.data.lineups,
       events: nextProps.data.events,
       teams: nextProps.data.teams,
       score: nextProps.data.score,
@@ -97,7 +97,7 @@ class Lineup extends Component {
 
         <div className="row">
           <div className="col-6">
-            {this.state.lineup[0].map(player => (
+            {this.state.lineups[0].map(player => (
               <div key={player.player_id} className="row mb-1">
                 <span className="col-1">{player.player_id}</span>
                 <span className="col-1">-</span>
@@ -149,7 +149,7 @@ class Lineup extends Component {
             ))}
           </div>
           <div className="col-6">
-            {this.state.lineup[1].map(player => (
+            {this.state.lineups[1].map(player => (
               <div key={player.player_id} className="row mb-1">
                 <span className="col-1">{player.player_id}</span>
                 <span className="col-1">-</span>
@@ -209,7 +209,7 @@ class Lineup extends Component {
 export default Lineup
 
 Lineup.propTypes = {
-  lineup: propTypes.array,
+  lineups: propTypes.array,
   events: propTypes.array,
   updateStats: propTypes.func
 }
