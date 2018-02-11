@@ -50,8 +50,8 @@ class Teams extends Component {
 
   render() {
     return (
-      <div className="teams container-fluid">
-        <h3 className="d-inline-block mt-4">Teams</h3>
+      <div className="teams container-fluid widget">
+        <h3 className="d-inline-block">Teams</h3>
 
         <div className="row">
           <div className="col-6">

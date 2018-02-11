@@ -77,8 +77,8 @@ class Lineup extends Component {
 
   render() {
     return (
-      <div className="lineup container-fluid">
-        <h3 className="d-inline-block mt-4">Lineup</h3>
+      <div className="lineup container-fluid widget">
+        <h3 className="d-inline-block">Lineup</h3>
 
         <div className="row">
           <div className="col-6">

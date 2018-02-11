@@ -51,44 +51,70 @@ class Stats extends Component {
 
   render() {
     return (
-      <div className="stats container-fluid">
-        <h3 className="d-inline-block mt-4">Stats</h3>
+      <div className="stats container-fluid widget">
+        <h3 className="d-inline-block">Stats</h3>
         {this.state.stats.map((stat, index) => (
           <div
             key={stat.name}
             className="stats-row row justify-content-between mt-1 mb-1"
           >
             <span className="col-3">{stat.display_name}</span>
-            <input
-              name={`${stat.name}-${index}-0`}
-              type="text"
-              value={stat.values[0]}
-              onChange={this.handleChange}
-              className="form-control col-2"
-              placeholder="Stat Value 1"
-            />
-            <span className="col-1">{stat.type === 'percentage' && '%'}</span>
-            <button
-              className="btn btn-secondary col-1"
-              onClick={() => this.incrementStat(index, 0, stat.increment)}
-            >
-              <i className="fas fa-plus" />
-            </button>
-            <input
-              name={`${stat.name}-${index}-1`}
-              type="text"
-              onChange={this.handleChange}
-              value={stat.values[1]}
-              className="form-control col-2"
-              placeholder="Stat Value 2"
-            />
-            <span className="col-1">{stat.type === 'percentage' && '%'}</span>
-            <button
-              className="btn btn-secondary col-1"
-              onClick={() => this.incrementStat(index, 1, stat.increment)}
-            >
-              <i className="fas fa-plus" />
-            </button>
+
+            <div className="input-group col-3">
+              <input
+                name={`${stat.name}-${index}-1`}
+                type="text"
+                onChange={this.handleChange}
+                value={stat.values[1]}
+                className="form-control"
+                placeholder="Stat Value 2"
+              />
+              <div className="input-group-append">
+                <span
+                  className="input-group-text stats-input-icon"
+                  id="basic-addon1"
+                >
+                  {stat.type === 'percentage' && '%'}
+                </span>
+              </div>
+            </div>
+
+            <span className="col-1">
+              <button
+                className="btn btn-secondary"
+                onClick={() => this.incrementStat(index, 0, stat.increment)}
+              >
+                <i className="fas fa-plus" />
+              </button>
+            </span>
+
+            <div className="input-group col-3">
+              <input
+                name={`${stat.name}-${index}-1`}
+                type="text"
+                onChange={this.handleChange}
+                value={stat.values[1]}
+                className="form-control"
+                placeholder="Stat Value 2"
+              />
+              <div className="input-group-append">
+                <span
+                  className="input-group-text stats-input-icon"
+                  id="basic-addon1"
+                >
+                  {stat.type === 'percentage' && '%'}
+                </span>
+              </div>
+            </div>
+
+            <span className="col-1">
+              <button
+                className="btn btn-secondary"
+                onClick={() => this.incrementStat(index, 0, stat.increment)}
+              >
+                <i className="fas fa-plus" />
+              </button>
+            </span>
           </div>
         ))}
       </div>
