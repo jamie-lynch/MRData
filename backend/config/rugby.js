@@ -146,15 +146,15 @@ const events = [
     inc: 3,
     stats: 'penalties'
   },
-  // { type: 'score', display: 'Drop Kick', inc: 3, stats: 'drop_kicks' },
-  // { type: 'score', display: 'Conversion', inc: 2, stats: 'conversions' },
+  { type: 'score', display: 'Drop Kick', inc: 3, stats: 'drop_kicks' },
+  { type: 'score', display: 'Conversion', inc: 2, stats: 'conversions' },
   {
     type: 'yellow_card',
     display: 'Yellow Card',
     inc: 2,
     stats: 'yellow_cards'
-  }
-  // { type: 'red_card', display: 'red Card', inc: 2, stats: 'red_cards' }
+  },
+  { type: 'red_card', display: 'Red Card', inc: 2, stats: 'red_cards' }
 ]
 
 module.exports = { stats, teams, score, lineup, events }

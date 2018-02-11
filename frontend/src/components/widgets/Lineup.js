@@ -1,5 +1,12 @@
 import React, { Component } from 'react'
 import propTypes from 'prop-types'
+import c from 'classnames'
+import {
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from 'reactstrap'
 
 class Lineup extends Component {
   constructor(props) {
@@ -10,10 +17,12 @@ class Lineup extends Component {
       events: this.props.data.events,
       teams: this.props.data.teams,
       score: this.props.data.score,
-      stats: this.props.data.stats
+      stats: this.props.data.stats,
+      dropdown: null
     }
 
     this.handleClick = this.handleClick.bind(this)
+    this.toggle = this.toggle.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -75,6 +84,12 @@ class Lineup extends Component {
     this.props.sendUpdate(msg)
   }
 
+  toggle(id) {
+    this.setState(prevState => {
+      return { dropdown: id === prevState.dropdown ? null : id }
+    })
+  }
+
   render() {
     return (
       <div className="lineup container-fluid widget">
@@ -83,42 +98,104 @@ class Lineup extends Component {
         <div className="row">
           <div className="col-6">
             {this.state.lineup[0].map(player => (
-              <div key={player.number} className="row">
+              <div key={player.number} className="row mb-1">
                 <span className="col-1">{player.number}</span>
                 <span className="col-1">-</span>
                 <span className="col-3">{`${player.firstname} ${
                   player.surname
                 }`}</span>
                 <span className="col-7">
-                  {this.state.events.map(event => (
+                  {this.state.events.slice(0, 2).map((event, index) => (
                     <button
+                      className={c('btn ml-1', {
+                        'btn-seconday': index % 2,
+                        'btn-dark': !(index % 2)
+                      })}
                       key={event.display}
                       onClick={() => this.handleClick(event, player, 0)}
                     >
                       {event.display}
                     </button>
                   ))}
+                  {this.state.events.slice(2).length && (
+                    <ButtonDropdown
+                      isOpen={this.state.dropdown === `${player.number}-0`}
+                      toggle={() => this.toggle(`${player.number}-0`)}
+                      className="ml-1"
+                    >
+                      <DropdownToggle caret>Other</DropdownToggle>
+                      <DropdownMenu
+                        className={c({
+                          open: this.state.dropdown === `${player.number}-0`
+                        })}
+                      >
+                        {this.state.events.slice(2).map(option => {
+                          return (
+                            <DropdownItem
+                              key={`${option.display}-${player.number}`}
+                              onClick={() =>
+                                this.handleClick(option, player, 0)
+                              }
+                            >
+                              {option.display}
+                            </DropdownItem>
+                          )
+                        })}
+                      </DropdownMenu>
+                    </ButtonDropdown>
+                  )}
                 </span>
               </div>
             ))}
           </div>
           <div className="col-6">
             {this.state.lineup[1].map(player => (
-              <div key={player.number} className="row">
+              <div key={player.number} className="row mb-1">
                 <span className="col-1">{player.number}</span>
                 <span className="col-1">-</span>
                 <span className="col-3">{`${player.firstname} ${
                   player.surname
                 }`}</span>
                 <span className="col-7">
-                  {this.state.events.map(event => (
+                  {this.state.events.slice(0, 2).map((event, index) => (
                     <button
+                      className={c('btn ml-1', {
+                        'btn-seconday': index % 2,
+                        'btn-dark': !(index % 2)
+                      })}
                       key={event.display}
                       onClick={() => this.handleClick(event, player, 1)}
                     >
                       {event.display}
                     </button>
                   ))}
+                  {this.state.events.slice(2).length && (
+                    <ButtonDropdown
+                      isOpen={this.state.dropdown === `${player.number}-1`}
+                      toggle={() => this.toggle(`${player.number}-1`)}
+                      className="ml-1"
+                    >
+                      <DropdownToggle caret>Other</DropdownToggle>
+                      <DropdownMenu
+                        className={c({
+                          open: this.state.dropdown === `${player.number}-1`
+                        })}
+                      >
+                        {this.state.events.slice(2).map(option => {
+                          return (
+                            <DropdownItem
+                              key={`${option.display}-${player.number}`}
+                              onClick={() =>
+                                this.handleClick(option, player, 1)
+                              }
+                            >
+                              {option.display}
+                            </DropdownItem>
+                          )
+                        })}
+                      </DropdownMenu>
+                    </ButtonDropdown>
+                  )}
                 </span>
               </div>
             ))}

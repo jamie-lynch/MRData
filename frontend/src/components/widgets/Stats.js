@@ -65,7 +65,7 @@ class Stats extends Component {
                 name={`${stat.name}-${index}-1`}
                 type="text"
                 onChange={this.handleChange}
-                value={stat.values[1]}
+                value={stat.values[0]}
                 className="form-control"
                 placeholder="Stat Value 2"
               />

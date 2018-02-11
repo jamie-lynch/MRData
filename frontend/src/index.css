@@ -6044,6 +6044,9 @@ a.text-dark:hover, a.text-dark:focus {
   transform: skewX(-30deg);
   margin-left: 10px; }
 
+.open {
+  display: block; }
+
 .loader {
   border: 16px solid #636363;
   border-top: 16px solid black;
