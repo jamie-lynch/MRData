@@ -16,8 +16,14 @@ const updateData = (req, res, next) => {
   let data = req.body.data
 
   let updateObj = {}
+
   if (type === 'stats') {
     updateObj = { stats: data }
+  } else if (type === 'team') {
+    updateObj = {
+      team: data.teams,
+      lineup: data.lineups
+    }
   } else {
     let eventType = data.type
     switch (eventType) {

@@ -51,10 +51,11 @@ class App extends Component {
             return { data: state }
           })
           break
-        case 'teams':
+        case 'team':
           this.setState(prevState => {
             let state = Object.assign({}, prevState.data)
-            state.teams = data
+            state.teams = data.teams
+            state.lineups = data.lineups
             return { data: state }
           })
           break

@@ -36,3 +36,31 @@
   }
 }
 ```
+
+** Team Data **
+
+```
+{
+  type: team,
+  data: {
+    teams: [
+      {
+        name: string,
+        shortname: string
+        colour: hex
+      },
+      {
+
+      }
+    ],
+    lineups: [
+      [
+        {
+          player_id: int,
+          firstname: string,
+          surname: string
+        }
+      ], []]
+  }
+}
+```
