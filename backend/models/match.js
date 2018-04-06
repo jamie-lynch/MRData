@@ -15,24 +15,12 @@ matchSchema.statics.create = type => {
   return new Promise((resolve, reject) => {
     var match = new Match({})
 
-    let conf = config[type]
+    match.stats = []
 
-    // set default stats
-    let stats = conf.stats.map(stat => {
-      return {
-        name: stat.name,
-        display_name: stat.display,
-        type: stat.type,
-        values: [stat.default, stat.default],
-        increment: stat.increment
-      }
-    })
-    match.stats = stats
-
-    match.teams = conf.teams
-    match.score = conf.score
-    match.lineups = conf.lineups
-    match.events = conf.events
+    match.teams = []
+    match.score = [0, 0]
+    match.lineups = []
+    match.events = []
 
     match
       .save()
@@ -44,6 +32,39 @@ matchSchema.statics.create = type => {
       })
   })
 }
+// matchSchema.statics.create = type => {
+//   return new Promise((resolve, reject) => {
+//     var match = new Match({})
+//
+//     let conf = config[type]
+//
+//     // set default stats
+//     let stats = conf.stats.map(stat => {
+//       return {
+//         name: stat.name,
+//         display_name: stat.display,
+//         type: stat.type,
+//         values: [stat.default, stat.default],
+//         increment: stat.increment
+//       }
+//     })
+//     match.stats = stats
+//
+//     match.teams = conf.teams
+//     match.score = conf.score
+//     match.lineups = conf.lineups
+//     match.events = conf.events
+//
+//     match
+//       .save()
+//       .then(savedMatch => {
+//         id = savedMatch._id
+//       })
+//       .catch(err => {
+//         return reject(err)
+//       })
+//   })
+// }
 
 matchSchema.statics.get = () => {
   return new Promise((resolve, reject) => {

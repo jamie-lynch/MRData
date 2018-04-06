@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import propTypes from 'prop-types'
 import c from 'classnames'
 import {
   ButtonDropdown,
@@ -7,6 +6,7 @@ import {
   DropdownMenu,
   DropdownItem
 } from 'reactstrap'
+import { observer, inject } from 'mobx-react'
 
 class Lineup extends Component {
   constructor(props) {
@@ -206,10 +206,4 @@ class Lineup extends Component {
   }
 }
 
-export default Lineup
-
-Lineup.propTypes = {
-  lineups: propTypes.array,
-  events: propTypes.array,
-  updateStats: propTypes.func
-}
+export default inject('store')(observer(Lineup))

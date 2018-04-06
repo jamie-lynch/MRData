@@ -1,50 +1,35 @@
 import React from 'react'
+import { observer, inject } from 'mobx-react'
 
-const MainControls = ({ values, onCheckClick }) => (
+let widgets = [
+  { name: 'teams', label: 'Teams' },
+  { name: 'stats', label: 'Stats' },
+  { name: 'lineups', label: 'Lineups' }
+]
+
+const Navbar = ({ store }) => (
   <nav className="navbar fixed-bottom justify-content-start">
     <span className="navbar-brand">
       <i className="fas fa-cog fa-lg" />
     </span>
 
     <div className="display-checks">
-      <div className="form-check">
-        <input
-          type="checkbox"
-          className="form-check-input"
-          id="teams"
-          checked={values.teams}
-          onChange={onCheckClick}
-        />
-        <label className="form-check-label" htmlFor="teams">
-          Teams
-        </label>
-      </div>
-      <div className="form-check">
-        <input
-          type="checkbox"
-          className="form-check-input"
-          id="stats"
-          checked={values.stats}
-          onChange={onCheckClick}
-        />
-        <label className="form-check-label" htmlFor="stats">
-          Stats
-        </label>
-      </div>
-      <div className="form-check">
-        <input
-          type="checkbox"
-          className="form-check-input"
-          id="lineups"
-          checked={values.lineups}
-          onChange={onCheckClick}
-        />
-        <label className="form-check-label" htmlFor="lineups">
-          Lineups
-        </label>
-      </div>
+      {widgets.map(widget => (
+        <div className="form-check" key={widget.name}>
+          <input
+            type="checkbox"
+            className="form-check-input"
+            id={widget.name}
+            checked={store.widgets[widget.name]}
+            onChange={() => store.toggleWidget(widget.name)}
+          />
+          <label className="form-check-label" htmlFor={widget.name}>
+            {widget.label}
+          </label>
+        </div>
+      ))}
     </div>
   </nav>
 )
 
-export default MainControls
+export default inject('store')(observer(Navbar))

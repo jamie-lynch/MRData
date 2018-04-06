@@ -15,29 +15,17 @@ const updateData = (req, res, next) => {
   let type = req.body.type
   let data = req.body.data
 
-  let updateObj = {}
+  let update
 
-  if (type === 'stats') {
-    updateObj = { stats: data }
-  } else if (type === 'team') {
-    updateObj = {
-      teams: data.teams,
-      lineups: data.lineups
-    }
-  } else {
-    let eventType = data.type
-    switch (eventType) {
-      case 'score':
-        updateObj = {
-          [`score.${data.data.team_index}`]: data.data.score
-        }
-        break
-      default:
-        break
-    }
+  switch (type) {
+    case 'score':
+      // If we get a score update then its a reset otherwise it would have
+      // been done via an event
+      // The data score look like [1, 0] (or something)
+      update = { score: data }
   }
 
-  Match.modify(updateObj)
+  Match.modify(update)
     .then(() => {
       wss.broadcastChange(type, data)
       return res.status(200).json('ok')

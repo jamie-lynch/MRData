@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import propTypes from 'prop-types'
+import { observer, inject } from 'mobx-react'
 
 class Stats extends Component {
   constructor(props) {
@@ -62,7 +62,7 @@ class Stats extends Component {
 
             <div className="input-group col-3">
               <input
-                name={`${stat.name}-${index}-1`}
+                name={`${stat.name}-${index}-0`}
                 type="text"
                 onChange={this.handleChange}
                 value={stat.values[0]}
@@ -122,9 +122,4 @@ class Stats extends Component {
   }
 }
 
-export default Stats
-
-Stats.propTypes = {
-  sendUpdate: propTypes.func,
-  stats: propTypes.array
-}
+export default inject('store')(observer(Stats))
