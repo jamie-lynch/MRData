@@ -8,7 +8,7 @@ class Store {
       loading: true,
       widgets: {
         teams: true,
-        stats: false,
+        stats: true,
         lineups: false
       },
       teams: [
@@ -86,6 +86,7 @@ class Store {
           increment: 5
         }
       },
+      tempStats: {},
       lineups: [
         {
           1: { number: 1, first: 'Jamie', last: 'Lynch', active: true },
@@ -108,49 +109,20 @@ class Store {
     })
   }
 
-  toggleWidget = action('Set displayed widgets', name => {
-    this.widgets[name] = !this.widgets[name]
-  })
+  setInitialState = action('Set initial stage', ws => {
+    this.handleWebsocketMessage(ws)
 
-  updateScore = action('Update score', e => {
-    let type = e.type
-    let score = Number(e.target.value)
-    if (Number.isNaN(score)) {
-      return true
-    }
-    let name = e.target.name
-    let index = name.split('-')[1]
-
-    switch (type) {
-      case 'blur':
-        this.tempScores[index] = String(score)
-        let scores = this.scores.slice()
-        scores[index] = score
-        this.sendUpdate({ type: 'score', data: scores })
-        break
-      case 'change':
-        this.tempScores[index] = String(score)
-        break
-      case 'keypress':
-        if (e.charCode === 13) {
-          e.target.blur()
-        } else {
-          return true
-        }
-        break
-      default:
-        break
-    }
-  })
-
-  sendUpdate = action('Send update', data => {
-    request
-      .post(`//${window.location.hostname}:3001/update-data`)
-      .set('Content-Type', 'application/json')
-      .send(data)
-      .end((err, res) => {
+    request.get(`//${window.location.hostname}:3001/get-data`).end(
+      action('Update the data', (err, res) => {
         if (err) toast.error(err.message || 'An unexpected error occurred')
+
+        let data = res.body
+
+        this.scores = data.score
+
+        this.loading = false
       })
+    )
   })
 
   handleWebsocketMessage = action('Listen for messages', ws => {
@@ -170,31 +142,112 @@ class Store {
     })
   })
 
-  setInitialState = action('Set initial stage', ws => {
-    this.handleWebsocketMessage(ws)
-
-    request.get(`//${window.location.hostname}:3001/get-data`).end(
-      action('Update the data', (err, res) => {
+  sendUpdate = action('Send update', data => {
+    request
+      .post(`//${window.location.hostname}:3001/update-data`)
+      .set('Content-Type', 'application/json')
+      .send(data)
+      .end((err, res) => {
         if (err) toast.error(err.message || 'An unexpected error occurred')
-
-        let data = res.body
-
-        this.scores = data.score
-
-        this.loading = false
       })
-    )
   })
 
-  updateStats = action('Update stats', () => {
-    // let stats = this.state.data.stats.slice()
-    // stats[index].values[team_index] = value
-    // var data = {
-    //   type: 'stats',
-    //   data: stats
-    // }
-    //
-    // this.sendUpdate(data)
+  updateScore = action('Update score', e => {
+    let type = e.type
+    let score = Number(e.target.value)
+    if (Number.isNaN(score)) {
+      return true
+    }
+    let name = e.target.name
+    let index = name.split('-')[1]
+
+    switch (type) {
+      case 'blur':
+        let scores = this.scores.slice()
+        scores[index] = score
+        this.sendUpdate({ type: 'score', data: scores })
+        break
+      case 'change':
+        this.tempScores[index] = String(score)
+        break
+      case 'keypress':
+        if (e.charCode === 13) {
+          e.target.blur()
+        } else {
+          return true
+        }
+        break
+      default:
+        break
+    }
+  })
+
+  updateStats = action('Update stats', e => {
+    let type = e.type
+    let split = e.target.name.split('-')
+    let name = split[0]
+    let index = split[2]
+    let value = Number(e.target.value)
+    if (Number.isNaN(value)) {
+      return true
+    }
+
+    let temp
+    let tempStats
+    switch (type) {
+      case 'click':
+        temp = [null, null]
+        let stat = this.stats[name]
+        temp[index] = stat.values[index] + stat.increment
+        tempStats = Object.assign({}, this.tempStats, { [name]: temp })
+        this.tempStats = tempStats
+        this.sendUpdate({ type: 'stat-reset', data: this.tempStats[name] })
+        break
+      case 'change':
+        temp = [null, null]
+        temp[index] = value
+        tempStats = Object.assign({}, this.tempStats, { [name]: temp })
+        this.tempStats = tempStats
+        break
+      case 'blur':
+        this.sendUpdate({ type: 'stat-reset', data: this.tempStats[name] })
+        break
+      case 'keypress':
+        if (e.charCode === 13) {
+          e.target.blur()
+        } else {
+          return true
+        }
+        break
+      default:
+        break
+    }
+  })
+
+  incrementStat(row, index, inc) {
+    this.setState(prevState => {
+      let stats = prevState.stats.slice()
+      stats[row].values[index] = String(Number(stats[row].values[index]) + inc)
+      this.updateStats(stats)
+      return { stats }
+    })
+  }
+
+  handleChange(e) {
+    let row = e.target.name.split('-')[1]
+    let index = e.target.name.split('-')[2]
+    let value = e.target.value
+
+    this.setState(prevState => {
+      let stats = prevState.stats.slice()
+      stats[row].values[index] = value
+      this.updateStats(stats)
+      return { stats }
+    })
+  }
+
+  toggleWidget = action('Set displayed widgets', name => {
+    this.widgets[name] = !this.widgets[name]
   })
 }
 

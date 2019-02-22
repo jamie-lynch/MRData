@@ -1,122 +1,75 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { observer, inject } from 'mobx-react'
 
 class Stats extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      stats: props.stats || []
-    }
-
-    this.updateStats = this.updateStats.bind(this)
-    this.handleChange = this.handleChange.bind(this)
-    this.incrementStat = this.incrementStat.bind(this)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ stats: nextProps.stats })
-  }
-
-  updateStats(stats) {
-    var data = {
-      type: 'stats',
-      data: stats
-    }
-
-    this.props.sendUpdate(data)
-  }
-
-  incrementStat(row, index, inc) {
-    this.setState(prevState => {
-      let stats = prevState.stats.slice()
-      stats[row].values[index] = String(Number(stats[row].values[index]) + inc)
-      this.updateStats(stats)
-      return { stats }
-    })
-  }
-
-  handleChange(e) {
-    let row = e.target.name.split('-')[1]
-    let index = e.target.name.split('-')[2]
-    let value = e.target.value
-
-    this.setState(prevState => {
-      let stats = prevState.stats.slice()
-      stats[row].values[index] = value
-      this.updateStats(stats)
-      return { stats }
-    })
-  }
-
   render() {
+    let store = this.props.store
     return (
       <div className="stats container-fluid widget">
         <h3 className="d-inline-block">Stats</h3>
-        {this.state.stats.map((stat, index) => (
-          <div
-            key={stat.name}
-            className="stats-row row justify-content-between mt-1 mb-1"
-          >
-            <span className="col-3">{stat.display_name}</span>
 
-            <div className="input-group col-3">
-              <input
-                name={`${stat.name}-${index}-0`}
-                type="text"
-                onChange={this.handleChange}
-                value={stat.values[0]}
-                className="form-control"
-                placeholder="Stat Value 2"
-              />
-              <div className="input-group-append">
-                <span
-                  className="input-group-text stats-input-icon"
-                  id="basic-addon1"
-                >
-                  {stat.type === 'percentage' && '%'}
-                </span>
-              </div>
+        {Object.keys(store.stats).map((key, index) => {
+          let stat = store.stats[key]
+          return (
+            <div
+              key={stat.name}
+              className="stats-row row justify-content-between mt-1 mb-1"
+            >
+              <span className="col-3">{stat.label}</span>
+
+              {stat.values.map((value, index2) => {
+                return (
+                  <Fragment key={`${stat.name}-${index}-${index2}`}>
+                    <div className="input-group col-3">
+                      <input
+                        name={`${stat.name}-${index}-${index2}`}
+                        type="text"
+                        className="form-control"
+                        placeholder={`Stat Value ${index2 + 1}`}
+                        value={
+                          store.tempStats[stat.name] &&
+                          (store.tempStats[stat.name][index2] ||
+                            store.tempStats[stat.name][index2] === 0)
+                            ? store.tempStats[stat.name][index2]
+                            : value
+                        }
+                        onChange={store.updateStats}
+                        onBlur={store.updateStats}
+                        onKeyPress={store.updateStats}
+                      />
+                      <div className="input-group-append">
+                        <span
+                          className="input-group-text stats-input-icon"
+                          id="basic-addon1"
+                        >
+                          {stat.type === 'percentage' && '%'}
+                        </span>
+                      </div>
+                    </div>
+                    <span className="col-1">
+                      <button
+                        className="btn btn-secondary btn-plus"
+                        name={`${stat.name}-${index}-${index2}`}
+                        onClick={store.updateStats}
+                      >
+                        +
+                      </button>
+                    </span>
+                  </Fragment>
+                )
+              })}
             </div>
+          )
+        })}
 
-            <span className="col-1">
-              <button
-                className="btn btn-secondary"
-                onClick={() => this.incrementStat(index, 0, stat.increment)}
-              >
-                <i className="fas fa-plus" />
-              </button>
-            </span>
-
-            <div className="input-group col-3">
-              <input
-                name={`${stat.name}-${index}-1`}
-                type="text"
-                onChange={this.handleChange}
-                value={stat.values[1]}
-                className="form-control"
-                placeholder="Stat Value 2"
-              />
-              <div className="input-group-append">
-                <span
-                  className="input-group-text stats-input-icon"
-                  id="basic-addon1"
-                >
-                  {stat.type === 'percentage' && '%'}
-                </span>
-              </div>
-            </div>
-
-            <span className="col-1">
-              <button
-                className="btn btn-secondary"
-                onClick={() => this.incrementStat(index, 0, stat.increment)}
-              >
-                <i className="fas fa-plus" />
-              </button>
-            </span>
-          </div>
-        ))}
+        <div className="text-danger mt-3">
+          For all absolute values the increment buttons should be used to modify
+          stats. This will trigger an event an update other values (e.g. score)
+          accordingly. When editing manually, the update will be sent either
+          after hitting enter or clicking out of the input. This will trigger a
+          silent reset for score statistics (i.e penalty) so only use it if you
+          have made a mistake.
+        </div>
       </div>
     )
   }

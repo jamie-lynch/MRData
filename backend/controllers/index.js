@@ -23,6 +23,14 @@ const updateData = (req, res, next) => {
       // been done via an event
       // The data score look like [1, 0] (or something)
       update = { score: data }
+    case 'stats':
+      // A stats message means that someone clicked a button. Trigger any events
+      // and update scores as required
+      break
+    case 'stats-reset':
+      // Stats reset means someone f*$!ed it and now we need to reset the value
+      // quietly. Also reset the score quiety if required.
+      break
   }
 
   Match.modify(update)
